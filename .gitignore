@@ -1,0 +1,15 @@
+# Python / Virtual Environments
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+
+# PyInstaller build slops
+build/
+dist/
+*.build/
+*.pyz
+
+# PyInstaller spec file
+*.spec
