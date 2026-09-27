@@ -93,10 +93,10 @@ class Ui_Form(object):
 
         self.horizontalLayout_4.addWidget(self.btn_copy)
 
-        self.label_4 = QLabel(Form)
-        self.label_4.setObjectName(u"label_4")
+        self.lbl_status = QLabel(Form)
+        self.lbl_status.setObjectName(u"lbl_status")
 
-        self.horizontalLayout_4.addWidget(self.label_4)
+        self.horizontalLayout_4.addWidget(self.lbl_status)
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_4)
@@ -120,6 +120,6 @@ class Ui_Form(object):
         self.btn_capture.setText(QCoreApplication.translate("Form", u"Capture", None))
         self.label_3.setText(QCoreApplication.translate("Form", u"Extracted Text:", None))
         self.btn_copy.setText(QCoreApplication.translate("Form", u"Copy to clipboard", None))
-        self.label_4.setText(QCoreApplication.translate("Form", u"TextLabel", None))
+        self.lbl_status.setText(QCoreApplication.translate("Form", u"TextLabel", None))
     # retranslateUi
 

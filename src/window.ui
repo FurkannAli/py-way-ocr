@@ -105,7 +105,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="lbl_status">
        <property name="text">
         <string>TextLabel</string>
        </property>
