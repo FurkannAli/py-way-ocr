@@ -7,14 +7,26 @@ logger = logging.getLogger("CaptureModule")
 
 CAPTURE_PATH = "/tmp/ocr_capture.png"
 
+#pyinstaller sets env variables to different places and it
+#messes up when we try to use external cli binaries and stuff
+#this should fix it
+def _get_clean_env() -> dict[str, str]:
+    env = os.environ.copy()
+    for var in ["LD_LIBRARY_PATH", "QT_PLUGIN_PATH", "QT_QPA_PLATFORM_PLUGIN_PATH", "PYTHONHOME", "PYTHONPATH"]:
+        env.pop(var, None)
+    return env
+
 def _capture_slurp_grim(output_path: str) -> bool:
     try:
+        clean_env = _get_clean_env()
+
         #get coordinates from slurp
         slurp = subprocess.run(
             ["slurp"],
             capture_output=True,
             text=True,
-            check=True
+            check=True,
+            env=clean_env
         )
         coords = slurp.stdout.strip()
         if not coords:
@@ -24,7 +36,8 @@ def _capture_slurp_grim(output_path: str) -> bool:
         grim = subprocess.run(
             ["grim", "-g", coords, output_path],
             capture_output=True,
-            text=True
+            text=True,
+            env=clean_env
         )
 
         if grim.returncode == 0 and os.path.exists(output_path):
@@ -46,7 +59,8 @@ def _capture_spectacle(output_path: str) -> bool:
         spectacle = subprocess.run(
             ["spectacle", "-r", "-b", "-n", "-o", output_path],
             capture_output=True,
-            text=True
+            text=True,
+            env=_get_clean_env()
         )
 
         if spectacle.returncode == 0 and os.path.exists(output_path):
