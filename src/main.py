@@ -60,14 +60,21 @@ class OCRCompanionApp(QWidget):
 
     def setup_combo_data(self):
         #attaches actual data to the combo box 
+        #cant this be ((dynamic))?? ( ╹ -╹)?
         self.ui.combo_lang.clear()
         self.ui.combo_lang.addItem("English (eng)", "eng")
-        self.ui.combo_lang.addItem("Japanese (jpn)", "jpn")
-        self.ui.combo_lang.addItem("Chinese Simplified (chi_sim)", "chi_sim")
+        self.ui.combo_lang.addItem("Japanese - Horizontal (jpn)", "jpn")
+        self.ui.combo_lang.addItem("Japanese - Vertical (jpn_vert)", "jpn_vert")
+        self.ui.combo_lang.addItem("Chinese Sim. - Horizontal (chi_sim)", "chi_sim")
+        self.ui.combo_lang.addItem("Chinese Sim. - Vertical (chi_sim_vert)", "chi_sim_vert")
         self.ui.combo_lang.addItem("Japanese + English", "jpn+eng")
+        self.ui.combo_lang.addItem("Chinese Sim. + English", "chi_sim+eng")
+
+
 
         self.ui.combo_psm.clear()
-        self.ui.combo_psm.addItem("6 (Single Block)", 6)
+        self.ui.combo_psm.addItem("6 (Single Block - Horizontal)", 6)
+        self.ui.combo_psm.addItem("5 (Single Block - Vertical)", 5)
         self.ui.combo_psm.addItem("11 (Sparse Text)", 11)
         self.ui.combo_psm.addItem("3 (Auto)", 3)
 

@@ -23,7 +23,7 @@ class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(485, 281)
+        Form.resize(421, 265)
         font = QFont()
         font.setPointSize(12)
         Form.setFont(font)
@@ -33,6 +33,9 @@ class Ui_Form(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label = QLabel(Form)
         self.label.setObjectName(u"label")
+        font1 = QFont()
+        font1.setPointSize(9)
+        self.label.setFont(font1)
 
         self.horizontalLayout.addWidget(self.label)
 
@@ -41,20 +44,26 @@ class Ui_Form(object):
         self.combo_lang.addItem("")
         self.combo_lang.addItem("")
         self.combo_lang.setObjectName(u"combo_lang")
-        font1 = QFont()
-        font1.setPointSize(16)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.combo_lang.sizePolicy().hasHeightForWidth())
+        self.combo_lang.setSizePolicy(sizePolicy)
+        self.combo_lang.setMaximumSize(QSize(150, 16777215))
         self.combo_lang.setFont(font1)
 
         self.horizontalLayout.addWidget(self.combo_lang)
 
         self.label_2 = QLabel(Form)
         self.label_2.setObjectName(u"label_2")
+        self.label_2.setFont(font1)
 
         self.horizontalLayout.addWidget(self.label_2)
 
         self.combo_psm = QComboBox(Form)
         self.combo_psm.addItem("")
         self.combo_psm.setObjectName(u"combo_psm")
+        self.combo_psm.setFont(font1)
 
         self.horizontalLayout.addWidget(self.combo_psm)
 
@@ -90,11 +99,14 @@ class Ui_Form(object):
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.btn_copy = QPushButton(Form)
         self.btn_copy.setObjectName(u"btn_copy")
+        self.btn_copy.setFont(font1)
 
         self.horizontalLayout_4.addWidget(self.btn_copy)
 
         self.lbl_status = QLabel(Form)
         self.lbl_status.setObjectName(u"lbl_status")
+        self.lbl_status.setFont(font1)
+        self.lbl_status.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.horizontalLayout_4.addWidget(self.lbl_status)
 
