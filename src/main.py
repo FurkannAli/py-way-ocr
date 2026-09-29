@@ -10,6 +10,36 @@ from capture import capture_region
 from ocr_engine import extract_text
 from window import Ui_Form
 
+import logging
+import pytesseract
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("Main")
+
+LANG_DISPLAY_NAMES = {
+    "eng": "English",
+    "equ": "Math / Equations",
+    "jpn": "Japanese - Horizontal",
+    "jpn_vert": "Japanese - Vertical",
+    "chi_sim": "Chinese Sim. - Horizontal",
+    "chi_sim_vert": "Chinese Sim. - Vertical",
+    "chi_tra": "Chinese Trad. - Horizontal",
+    "chi_tra_vert": "Chinese Trad. - Vertical",
+    "tur": "Turkish",
+    "deu": "German",
+    "fra": "French",
+    "spa": "Spanish",
+    "rus": "Russian",
+}
+
+PSM_OPTIONS = [
+    (6, "6 (Single Block - Horizontal)"),
+    (5, "5 (Single Block - Vertical)"),
+    (11, "11 (Sparse Text)"),
+    (3, "3 (Auto Segment)"),
+    (4, "4 (Single Column)"),
+    (1, "1 (Auto + OSD Orientation)"),
+]
 
 class OCRWorker(QThread):
     #worker thread so slurp or ((spectacle)) doesnt freeze the gui
@@ -61,22 +91,34 @@ class OCRCompanionApp(QWidget):
     def setup_combo_data(self):
         #attaches actual data to the combo box 
         #cant this be ((dynamic))?? ( ╹ -╹)?
+        #yeah done lol
         self.ui.combo_lang.clear()
-        self.ui.combo_lang.addItem("English (eng)", "eng")
-        self.ui.combo_lang.addItem("Japanese - Horizontal (jpn)", "jpn")
-        self.ui.combo_lang.addItem("Japanese - Vertical (jpn_vert)", "jpn_vert")
-        self.ui.combo_lang.addItem("Chinese Sim. - Horizontal (chi_sim)", "chi_sim")
-        self.ui.combo_lang.addItem("Chinese Sim. - Vertical (chi_sim_vert)", "chi_sim_vert")
-        self.ui.combo_lang.addItem("Japanese + English", "jpn+eng")
-        self.ui.combo_lang.addItem("Chinese Sim. + English", "chi_sim+eng")
+        try:
+            installed_langs = pytesseract.get_languages()
+        except Exception:
+            # Fallback if tesseract binary check fails..
+            logger.warning("Tesseract binary check failed... Fallback to english only.")
+            installed_langs = ["eng"]
+        
+        #filter out that one
+        available_langs = [lang for lang in installed_langs if lang != "osd"]
 
-
+        for lang in available_langs:
+            friendly_name = LANG_DISPLAY_NAMES.get(
+                lang,
+                lang.replace("_", " ").title()
+            )
+            self.ui.combo_lang.addItem(f"{friendly_name} ({lang})", lang)
+        
+        if "jpn" in available_langs and "eng" in available_langs:
+            self.ui.combo_lang.addItem("Japanese + English (jpn+eng)", "jpn+eng")
+        
+        if "chi_sim" in available_langs and "eng" in available_langs:
+            self.ui.combo_lang.addItem("Chinese Sim. + English (chi_sim+eng)", "chi_sim+eng")
 
         self.ui.combo_psm.clear()
-        self.ui.combo_psm.addItem("6 (Single Block - Horizontal)", 6)
-        self.ui.combo_psm.addItem("5 (Single Block - Vertical)", 5)
-        self.ui.combo_psm.addItem("11 (Sparse Text)", 11)
-        self.ui.combo_psm.addItem("3 (Auto)", 3)
+        for psm_code, description in PSM_OPTIONS:
+            self.ui.combo_psm.addItem(description, psm_code)
 
     def init_shortcuts(self):
         #ctrl+s also triggers capture
