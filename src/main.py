@@ -11,6 +11,7 @@ from ocr_engine import extract_text
 from window import Ui_Form
 
 import logging
+import argparse
 import pytesseract
 
 logging.basicConfig(level=logging.INFO)
@@ -63,7 +64,6 @@ class OCRWorker(QThread):
         self.status_update.emit("Running OCR...")
         text = extract_text(image_path, lang=self.lang, psm=self.psm)
 
-        self.status_update.emit("Ready")
         self.finished.emit(text)
 
 class OCRCompanionApp(QWidget):
@@ -130,6 +130,8 @@ class OCRCompanionApp(QWidget):
         self.tray_icon = QSystemTrayIcon(self)
         self.tray_icon.setIcon(self.program_icon)
 
+        self.tray_icon.activated.connect(self.on_tray_icon_activated)
+
         tray_menu = QMenu()
         capture_action = tray_menu.addAction("Capture Snippet")
         capture_action.triggered.connect(self.start_ocr_process)
@@ -149,6 +151,11 @@ class OCRCompanionApp(QWidget):
         else:
             self.showNormal()
             self.activateWindow()
+
+    @Slot(QSystemTrayIcon.ActivationReason)
+    def on_tray_icon_activated(self, reason: QSystemTrayIcon.ActivationReason):
+        if reason == QSystemTrayIcon.ActivationReason.Trigger:
+            self.toggle_window()
 
     @Slot()
     def start_ocr_process(self):
@@ -170,6 +177,10 @@ class OCRCompanionApp(QWidget):
     def handle_ocr_finished(self, text: str):
         if text:
             self.ui.text_result.setText(text)
+            self.ui.lbl_status.setText(f"Extracted {len(text)} chars.")
+        else:
+            #this may get triggered when the selection is too small or something..
+            self.ui.lbl_status.setText("No text detected.")
         self.ui.btn_capture.setEnabled(True)
 
     def copy_to_clipboard(self):
@@ -180,12 +191,20 @@ class OCRCompanionApp(QWidget):
             self.ui.lbl_status.setText("Copited to clipboard.")
         
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="")
+    parser.add_argument("--capture", action="store_true", help="Trigger capture instantly on launch")
+    args, _ = parser.parse_known_args()
+
     app = QApplication(sys.argv)
 
     #prevent app termination while tray icon is active
     app.setQuitOnLastWindowClosed(False)
 
     window = OCRCompanionApp()
-    window.show()
+
+    if args.capture:
+        window.start_ocr_process()
+    else:
+        window.show()
 
     sys.exit(app.exec())
