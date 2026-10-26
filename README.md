@@ -7,8 +7,8 @@ Lightweight screen OCR tool for Linux (Wayland), built with **PySide6** and **Te
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
 <p align="center">
-    <img src="assets/screenshot_01.png" width="42%" alt="Overview Tab" />
-    <img src="assets/screenshot_02.png" width="45%" alt="Graphs Tab" />
+    <img src="assets/screenshot_01.png" width="42%" alt="Chinese capture"/>
+    <img src="assets/screenshot_02.png" width="45%" alt="Higurashi capture"/>
 </p>
 
 ## Key Features
@@ -50,6 +50,12 @@ External tools are launched with a cleaned environment (`LD_LIBRARY_PATH`, `QT_P
 - *(Optional)* `spectacle` for KDE Plasma
 
 ## Installation & Usage
+
+### Option 1: Standalone Binary (Recommended)
+
+Download the pre-compiled Linux executable from the [Releases](https://github.com/FurkannAli/py-way-ocr/releases) page and run it directly. No Python or pip packages required, but you still need the system tools listed under [Requirements](#requirements) (Tesseract, slurp and grim).
+
+### Option 2: Run from Source
 
 1. **Clone the repository:**
 
