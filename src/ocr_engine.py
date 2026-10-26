@@ -1,12 +1,15 @@
 import os
 import logging
-from re import L
 from PIL import Image, ImageOps, ImageEnhance
 import pytesseract
+import shutil
 
 #pointing tesseract to the system binary..
 #this binary name may vary depending on system..? 
-pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract-ocr'
+# yeah done ദ്ദി(˵ •̀ ᴗ - ˵ ) ✧
+tesseract = shutil.which("tesseract") or shutil.which("tesseract-ocr")
+if tesseract:
+    pytesseract.pytesseract.tesseract_cmd = tesseract
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("OCREngine")
